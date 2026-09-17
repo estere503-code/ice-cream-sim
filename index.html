@@ -1,62 +1,169 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pork & Garlic Ice Cream Co. — Winter Strategy</title>
-  <meta name="description" content="Year 2 Winter strategy comparison tool" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d2621'/%3E%3Cpath d='M19 42c0-11 7-21 13-21s13 10 13 21H19Z' fill='%23f3c75f'/%3E%3Cpath d='M20 43h24' stroke='%23fff7e7' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = { theme: { extend: { colors: { ink:'#10231f', pine:'#173e35', leaf:'#23856d', cream:'#fff8eb', butter:'#f4c75e', coral:'#e86b52', mist:'#e9f0ec' } } } }
-  </script>
-  <style>
-    body{background:#f4f1e9;color:#10231f;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-    input,textarea{width:100%;border:1px solid #cbd7d0;border-radius:.55rem;background:#fffdf8;padding:.48rem .58rem;color:#10231f;font-size:.9rem;outline:none} input:focus,textarea:focus{border-color:#23856d;box-shadow:0 0 0 3px rgba(35,133,109,.14)}
-    label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.045em;color:#517067;margin-bottom:.22rem}.metric{border-top:1px solid #d8e1dc;padding:.55rem 0;display:flex;justify-content:space-between;gap:.7rem;font-size:.88rem}.metric strong{font-variant-numeric:tabular-nums}.card{background:#fffdf8;border:1px solid #d7dfdb;border-radius:1rem;box-shadow:0 1px 1px rgba(16,35,31,.035)}
-  </style>
-</head>
-<body>
-  <main class="max-w-[1600px] mx-auto px-4 py-5 md:px-8 md:py-8">
-    <header class="bg-ink text-cream rounded-2xl p-5 md:p-7 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-      <div><div class="text-butter text-xs uppercase font-bold tracking-[.16em]">Decision desk · Year 2</div><h1 class="text-2xl md:text-4xl font-black tracking-tight mt-1">Pork & Garlic Ice Cream Co.</h1><p class="text-slate-300 mt-1">Winter strategy tool — model the cash, then choose the risk.</p></div>
-      <div class="flex items-center gap-3 bg-white/10 rounded-xl px-4 py-3"><span class="h-2.5 w-2.5 rounded-full bg-butter"></span><div><div class="text-xs text-slate-300">Planning period</div><div class="font-bold">Year 2 · Winter</div></div></div>
-    </header>
+Fix the existing Pork & Garlic Ice Cream Co. simulation app. Implement the changes directly in the current repository; preserve the existing Vercel configuration and deployment setup.
 
-    <section class="grid xl:grid-cols-[1.1fr_1.9fr] gap-5 mt-5">
-      <aside class="space-y-5">
-        <section class="card p-5"><div class="flex items-center justify-between"><div><h2 class="font-black text-lg">Year 1 roll-over</h2><p class="text-sm text-slate-500">Opening position for Winter.</p></div><span class="text-xl">↻</span></div>
-          <div class="grid grid-cols-2 gap-3 mt-4">
-            <div><label>Autumn closing cash</label><input id="startCash" type="number" value="180000"></div><div><label>Tax loss pool</label><input id="lossPool" type="number" value="25000"></div>
-            <div><label>Outstanding loan</label><input id="oldLoan" type="number" value="60000"></div><div><label>Old loan interest %</label><input id="oldInterest" type="number" value="8"></div>
-            <div><label>Owned machines</label><input id="ownedMachines" type="number" value="2"></div><div><label>Remaining life (seasons)</label><input id="machineLife" type="number" value="5" min="1" max="8"></div>
-            <div class="col-span-2"><label>Original machine cost (each)</label><input id="ownedMachineCost" type="number" value="32000"></div>
-          </div>
-          <p class="text-xs text-slate-500 mt-3">Straight-line depreciation uses the remaining machine life. Adjust rates to match your classroom rules.</p>
-        </section>
-        <section class="card p-5"><div class="flex items-center justify-between"><div><h2 class="font-black text-lg">Year 1 verification</h2><p class="text-sm text-slate-500">Use a real season as a quick sense-check.</p></div><input id="verifyToggle" type="checkbox" class="!w-5 !h-5 accent-leaf"></div>
-          <div id="verifyArea" class="hidden mt-4 bg-mist rounded-xl p-3"><div class="grid grid-cols-2 gap-3"><div><label>Test revenue</label><input id="vRevenue" type="number" value="150000"></div><div><label>Test direct costs</label><input id="vCosts" type="number" value="104000"></div></div><div class="mt-3 text-sm">Calculated profit: <strong id="vProfit">Sh 46,000</strong><br><span class="text-slate-500">Enter classroom totals to confirm the difference you expect.</span></div></div>
-        </section>
-        <section class="card p-5 border-2 border-pine"><h2 class="font-black text-lg">Team recommendation</h2><p class="text-sm text-slate-500 mb-3">Editable decision record.</p><div class="space-y-3"><div><label>Recommended strategy</label><textarea id="recStrategy" rows="2">Option A — protect cash while testing demand.</textarea></div><div><label>Key assumption</label><textarea id="recAssumption" rows="2">Allocated sales reach at least 85% of requested sales.</textarea></div><div><label>Risk mitigation if sales fall short</label><textarea id="recRisk" rows="2">Reduce next-season milk purchases and defer machine purchase.</textarea></div></div></section>
-      </aside>
-      <section class="space-y-5">
-        <div class="flex flex-wrap items-end justify-between gap-3"><div><h2 class="text-2xl font-black">Compare winter options</h2><p class="text-slate-600">Every field recalculates both the profit and the cash position.</p></div><div class="flex gap-2"><button id="reset" class="rounded-lg border border-pine px-3 py-2 text-sm font-bold hover:bg-mist">Reset assumptions</button><button id="copyA" class="rounded-lg bg-pine text-cream px-3 py-2 text-sm font-bold hover:bg-leaf">Copy A → B</button></div></div>
-        <div id="scenarios" class="grid 2xl:grid-cols-2 gap-5"></div>
-        <section class="card p-5"><div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2"><div><h2 class="font-black text-xl">Financial variance analysis</h2><p class="text-sm text-slate-500">What is actually driving the gap?</p></div><div id="winner" class="rounded-full bg-mist px-3 py-1 text-sm font-bold"></div></div><div id="variance" class="mt-4 text-[.95rem] leading-7 text-slate-700"></div></section>
-      </section>
-    </section>
-    <footer class="text-xs text-slate-500 py-6">Planning model only. Update the rule inputs to match the classroom game parameters before committing to a strategy.</footer>
-  </main>
-  <script>
-  const base={ milkPrice:2600,rent:22000,transportRate:110,machinePrice:32000,milkTons:55,machinesUsed:2,machinesBought:0,production:45000,marketSpend:5000,requestedSales:42000,allocatedSales:39000,salePrice:12,newLoan:0,loanRate:9,loanRepay:0,salary:34000,otherCosts:6500,taxRate:25,spoilRate:8 };
-  let A={...base},B={...base,milkTons:65,production:53000,requestedSales:50000,allocatedSales:43000,machinesBought:1,marketSpend:8000,newLoan:35000,loanRepay:7000};
-  const fields=[['milkPrice','Milk $ / ton'],['rent','Premise rents'],['transportRate','Transport / ton'],['machinePrice','Machine price'],['milkTons','Milk tons bought'],['machinesUsed','Machines used'],['machinesBought','Machines bought'],['production','Planned production (units)'],['marketSpend','Market investment'],['requestedSales','Requested sales (units)'],['allocatedSales','Possible allocated sales'],['salePrice','Selling price / unit'],['newLoan','New bank loan'],['loanRate','New loan interest %'],['loanRepay','Loan repayment (principal)'],['salary','Salaries'],['otherCosts','Other cash costs'],['spoilRate','Spoilage %'],['taxRate','Game tax %']];
-  const money=n=>'Sh '+Math.round(n).toLocaleString(); const val=id=>+document.getElementById(id).value||0;
-  function calc(s){const opening=val('startCash'), oldLoan=val('oldLoan'), loss=val('lossPool'), owned=val('ownedMachines'), life=Math.max(1,val('machineLife')), cost=val('ownedMachineCost');const units=Math.min(s.production*(1-s.spoilRate/100),s.allocatedSales);const revenue=units*s.salePrice, milk=s.milkTons*s.milkPrice, transport=s.milkTons*s.transportRate, depr=owned*cost/life+s.machinesBought*s.machinePrice/8, interest=oldLoan*val('oldInterest')/100/4+s.newLoan*s.loanRate/100/4;const cogs=milk+s.otherCosts, profitBeforeTax=revenue-cogs-depr-transport-s.rent-s.salary-s.marketSpend-interest;const applied=Math.min(loss,Math.max(0,profitBeforeTax));const tax=Math.max(0,profitBeforeTax-applied)*s.taxRate/100;const net=profitBeforeTax-tax;const advance=opening+s.newLoan-milk-s.rent-s.transport-s.marketSpend-s.machinePrice*s.machinesBought;const close=opening+s.newLoan+revenue-milk-transport-s.rent-s.salary-s.marketSpend-s.otherCosts-interest-tax-s.machinePrice*s.machinesBought-s.loanRepay;return{units,revenue,milk,transport,depr,interest,cogs,applied,tax,net,advance,close,spoil:s.production*s.spoilRate/100,lossLeft:loss-applied};}
-  function input(k,l,s,id){return `<div><label>${l}</label><input data-s="${id}" data-k="${k}" type="number" min="0" ${k==='marketSpend'?'min="1000"':''} value="${s[k]}"></div>`}
-  function scenario(id,title,color,s){let r=calc(s);return `<article class="card overflow-hidden"><div class="p-5 text-cream ${color}"><div class="flex justify-between items-start"><div><div class="text-xs uppercase font-bold tracking-[.14em] text-white/70">Year 2 Winter</div><h3 class="text-2xl font-black">${title}</h3></div><div class="text-right"><div class="text-xs text-white/70">Closing cash</div><div class="text-xl font-black">${money(r.close)}</div></div></div></div><div class="p-5 space-y-5"><details open><summary class="cursor-pointer font-black">Estimated costs</summary><div class="grid grid-cols-2 gap-3 mt-3">${fields.slice(0,4).map(([k,l])=>input(k,l,s,id)).join('')}</div></details><details open><summary class="cursor-pointer font-black">Operations & sales</summary><div class="grid grid-cols-2 gap-3 mt-3">${fields.slice(4,12).map(([k,l])=>input(k,l,s,id)).join('')}</div></details><details><summary class="cursor-pointer font-black">Financing & other assumptions</summary><div class="grid grid-cols-2 gap-3 mt-3">${fields.slice(12).map(([k,l])=>input(k,l,s,id)).join('')}</div></details><div class="border-t border-slate-200 pt-4"><div class="flex items-center justify-between"><h4 class="font-black">Projected P&L</h4><span class="text-xs text-slate-500">Sales: ${r.units.toLocaleString()} units</span></div>${[['Revenue',r.revenue],['COGS',-r.cogs],['Depreciation',-r.depr],['Transport',-r.transport],['Premise rents',-s.rent],['Salaries',-s.salary],['Market spend',-s.marketSpend],['Interest',-r.interest],['Tax loss pool applied',r.applied],['Game tax',-r.tax],['Net profit',r.net]].map(([l,n])=>`<div class="metric ${l==='Net profit'?'font-black text-base border-t-2 border-pine mt-1':''}"><span>${l}</span><strong class="${n<0?'text-coral':''}">${n<0?'−':''}${money(Math.abs(n))}</strong></div>`).join('')}</div><div class="rounded-xl ${r.close<0||r.advance<0?'bg-red-50 border border-red-200':'bg-mist'} p-4"><div class="flex justify-between font-black"><span>Advance-payment cash</span><span class="${r.advance<0?'text-red-700':''}">${money(r.advance)}</span></div><div class="flex justify-between mt-2 font-black text-lg"><span>Projected closing cash</span><span class="${r.close<0?'text-red-700':''}">${money(r.close)}</span></div>${r.close<0||r.advance<0?'<p class="mt-2 text-sm text-red-700 font-bold">⚠ Negative cash flag — revise financing, buying, or production before play.</p>':'<p class="mt-2 text-sm text-leaf font-bold">✓ Cash remains positive under this allocation.</p>'}</div></div></article>`}
-  function render(){document.getElementById('scenarios').innerHTML=scenario('A','Option A','bg-pine',A)+scenario('B','Option B','bg-[#7b4b30]',B); const a=calc(A),b=calc(B),better=a.close>=b.close?'Option A':'Option B', diff=Math.abs(a.close-b.close),more=a.close>=b.close?['A','B',a,b]:['B','A',b,a];document.getElementById('winner').textContent=`${better} holds ${money(diff)} more cash`;document.getElementById('variance').innerHTML=`<strong>${better}</strong> finishes with <strong>${money(diff)}</strong> more cash. Option ${more[1]} carries ${more[3].spoil.toLocaleString()} units of expected spoilage versus ${more[2].spoil.toLocaleString()} in Option ${more[0]}. Rent is identical at ${money(A.rent)}, while ${more[0]} spends ${money(more[2].interest)} on interest and ${money(more[2].marketSpend)} on market investment, compared with ${money(more[3].interest)} and ${money(more[3].marketSpend)} for ${more[1]}. ${a.advance<0||b.advance<0?'The advance-payment position needs attention before the season starts.':'Both advance-payment positions remain funded.'}`;document.querySelectorAll('[data-s]').forEach(el=>el.addEventListener('input',e=>{let obj=e.target.dataset.s==='A'?A:B;obj[e.target.dataset.k]=+e.target.value||0;if(e.target.dataset.k==='marketSpend'&&obj.marketSpend<1000){obj.marketSpend=1000;e.target.value=1000}render()}));}
-  document.querySelectorAll('#startCash,#lossPool,#oldLoan,#oldInterest,#ownedMachines,#machineLife,#ownedMachineCost').forEach(x=>x.addEventListener('input',render));document.getElementById('verifyToggle').addEventListener('change',e=>document.getElementById('verifyArea').classList.toggle('hidden',!e.target.checked));document.querySelectorAll('#vRevenue,#vCosts').forEach(x=>x.addEventListener('input',()=>document.getElementById('vProfit').textContent=money(val('vRevenue')-val('vCosts'))));document.getElementById('copyA').addEventListener('click',()=>{B={...A};render()});document.getElementById('reset').addEventListener('click',()=>{A={...base};B={...base,milkTons:65,production:53000,requestedSales:50000,allocatedSales:43000,machinesBought:1,marketSpend:8000,newLoan:35000,loanRepay:7000};render()});render();
-  const ctx=document.modelContext;if(ctx?.registerTool){try{ctx.registerTool({name:'read_winter_strategy_summary',title:'Read winter strategy summary',description:'Read the visible cash and profit comparison for both winter options.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,untrustedContentHint:false},execute(){const a=calc(A),b=calc(B);return{optionA:{closingCash:a.close,netProfit:a.net,advanceCash:a.advance},optionB:{closingCash:b.close,netProfit:b.net,advanceCash:b.advance},recommendation:a.close>=b.close?'Option A':'Option B'}}});}catch(e){/* WebMCP is optional in unsupported browsers. */}}
-  </script>
-</body></html>
+Use the attached Year 1 Participant Rules and Year 2 Decision Tool homework as the source of truth for calculations and acceptance criteria.
+
+Core implementation requirements
+
+1. Fix number entry and focus loss
+- Do not rebuild scenario input elements with innerHTML on each keystroke.
+- Keep input elements and cursor positions stable while outputs update.
+- Allow normal typing, clearing, selecting, deleting, pasting, comma-separated values such as 50,000, and appropriate decimal values.
+- Keep raw input text during editing; validate and format on blur.
+- Do not force market investment to 1,000 while a user is typing. Show validation feedback instead.
+- Empty or invalid values must not show NaN or misleading valid financial outputs.
+
+2. Create one shared calculation engine
+Use the same calculation engine for both:
+- Year 1 verification mode
+- Year 2 Winter Option A and Option B planning
+
+Use whole-shekel rounding for each posted line, then calculate totals from rounded lines.
+
+3. Apply the Year 1 rules faithfully
+- Revenue = actual units sold × Sh 2.
+- Milk costs Sh 20,000 per ton and yields 20,000 units per ton.
+- At least one ton of milk and Sh 1,000 market investment are required each season, even if requested sales are zero.
+- Sales requests must be zero or multiples of 10,000, backed by production.
+- Actual sales cannot exceed requested sales or production.
+- Track purchased milk, production, actual sales, unused milk, and unsold ice cream separately.
+- Do not use an arbitrary spoilage percentage. Unused milk and unsold ice cream spoil at season end; charge the purchased milk cost once only.
+- Track machines individually: type, original purchase price, purchase timing, maintenance, capacity, location, and remaining life.
+- Machines depreciate at original purchase cost ÷ 8 per season for eight seasons, including idle seasons.
+- Idle owned machines still incur maintenance and depreciation until depreciation expires.
+- Enforce premise machine-slot limits, machine availability, milk limits, and production capacity.
+- Allocate actual sold units proportionally by actual premise production, round to whole units, and assign the residual to the final premise. Transport = allocated sold units × that premise’s transport rate.
+- Gross profit = revenue − full milk cost − maintenance − depreciation.
+- Bonus = 5% of positive gross profit, otherwise zero.
+- Fixed salaries = Sh 10,000 per season.
+- Profit before tax = gross profit − transport − market investment − bonus − salaries − rent − loan interest.
+- Apply carried tax losses before 10% game tax.
+- Show tax-loss opening balance, used amount, added loss, and closing balance.
+- Machine purchases and loan principal repayments affect cash flow only, not profit and loss.
+- Depreciation affects P&L only, not cash flow.
+
+4. Loans and cash timing
+- Track each loan separately.
+- Apply 10% seasonal interest to outstanding principal immediately before the season’s repayment.
+- Use equal principal installments beginning in the borrowing season.
+- Enforce 1–8 season repayment terms and Year 3 repayment deadlines from the rules.
+- New borrowing must cover its own same-season interest and first principal repayment.
+- Show a full cash-flow statement.
+- Check cash after advance payments: machine purchases, milk, and market investment.
+- Check closing cash after sales receipts and season-end payments: rent, maintenance, transport, salaries, bonus, loan payments, and tax.
+- Display clear written warnings when advance cash or closing cash is negative.
+
+5. Year 1 verification
+Replace the existing revenue-minus-costs check with a complete Year 1 season calculator.
+
+Allow entry of:
+- actual classroom decisions
+- expected net profit
+- expected closing cash
+
+Show:
+- calculated values
+- differences
+- pass/fail status
+
+Include a separately labelled “Worked Example Test” with:
+- Opening cash: Sh 100,000
+- Buy Machine 5: Sh 28,000
+- Rent Premise B
+- Buy 2 tons milk
+- Produce, request, and sell 40,000 units
+- Market investment: Sh 1,000
+- No loan
+- No opening tax losses
+
+Expected:
+- Gross profit: Sh 35,200
+- Bonus: Sh 1,760
+- Net loss: Sh 3,560
+- Closing cash: Sh 71,940
+- Closing tax-loss pool: Sh 3,560
+
+Add automated checks for:
+- worked example
+- proportional transport allocation
+- idle-machine maintenance
+- depreciation expiry
+- seasonal loan interest and first repayment
+- tax-loss carryforward
+- advance-cash shortfall
+- zero-sales minimum costs
+- whole-shekel rounding
+- no NaN output
+
+6. Year 2 Winter tool
+Start with editable Year 1 autumn roll-over data:
+- closing cash
+- annual profit for reference
+- each owned machine and remaining life
+- each outstanding loan and repayment schedule
+- unused tax losses
+
+Clearly label sample data as placeholders, not classroom data.
+
+Provide at least two independent plans, Option A and Option B. Each must allow editing:
+- production by premise
+- rented premises
+- machine assignments and purchases
+- milk purchases
+- sales requests
+- possible trainer allocation / actual sales
+- market investment
+- borrowing and repayment term
+
+Show the Year 2 Winter total market forecast of 410,000 units. Clearly state this is total market demand and not guaranteed company sales.
+
+Keep all unknown Year 2 prices, premises, machine choices, and storage rules editable and clearly labelled “Year 1 baseline — unconfirmed for Year 2.” Do not invent Year 2 storage rules.
+
+For each option show:
+- complete projected P&L
+- complete cash flow
+- advance-payment cash
+- closing cash
+- feasibility and negative-cash warnings
+- unused milk and unsold ice cream
+- tax-loss opening, used, added, and closing balances
+
+Add an accurate comparison explaining differences in:
+- sales
+- spoilage
+- rent
+- machine purchases
+- transport
+- market investment
+- interest
+- cash position
+
+Do not claim rents are identical unless they actually are. Do not automatically recommend the option with more borrowing or more closing cash. Explain the tradeoff.
+
+Include editable fields for:
+- Recommended Strategy
+- Key Assumption
+- Risk Mitigation if trainer allocation is lower than planned
+
+Explain that lower sales reduce revenue but do not reduce already committed milk, rent, machine, maintenance, or market costs.
+
+7. Design
+Use a simple responsive layout with:
+- Background: #F8FAFC
+- Cards and inputs: #FFFFFF
+- Main text: #0F172A
+- Primary buttons and accents: #0F766E
+- Borders: #CBD5E1
+- Error text: #B91C1C
+
+Avoid gradients, decorative charts, and unnecessary animations. Use readable labels, units, spacing, and text warnings.
+
+8. Validation and delivery
+- Run the app’s build and tests.
+- Test continuous typing of 50000 without focus loss.
+- Test pasting 50,000.
+- Test clearing and replacing values.
+- Test decimal values where applicable.
+- Confirm no NaN output.
+- Do not change the existing Vercel configuration or domain.
+- Summarize changed files, test results, and any remaining deployment step.
+- Do not claim production is updated unless deployment actually succeeds.
